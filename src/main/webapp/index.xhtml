@@ -2,15 +2,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:b="http://bootsfaces.net/ui">
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
     <title>CR Virtual</title>
 </h:head>
-<h:body>
-    <b:form inline="true">
-        <h:panelGrid columns="1" callpadding="5">
-            <h1>Bem-vindo ao CR Virtual</h1>
-        </h:panelGrid>
-    </b:form>
+<h:body style="background-color: #e0e0e0;">
+    <ui:include src="menu.xhtml"/>
+    <b:container>
+        <b:row>
+            <b:column>
+                <h1 style="text-align: center;">Bem-vindo ao CR Virtual</h1>
+                <h3 style="text-align: center;">Sistema de Gerenciamento de Cursos e Recursos Educacionais</h3>
+                <p style="text-align: center;">
+                    O CR Virtual é uma plataforma inovadora projetada para facilitar a gestão de cursos e recursos educacionais.
+                    Com uma interface amigável e funcionalidades robustas, o CR Virtual permite que administradores, professores e estudantes
+                    colaborem de maneira eficiente e eficaz.
+                </p>
+                <p style="text-align: center;">
+                    Explore nossas funcionalidades, gerencie seus cursos, acesse materiais educacionais e conecte-se com a comunidade acadêmica.
+                    Estamos comprometidos em proporcionar uma experiência educacional enriquecedora e acessível para todos os usuários.
+                </p>
+            </b:column>
+        </b:row>
+    </b:container>
 </h:body>
 </html>
