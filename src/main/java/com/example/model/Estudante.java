@@ -10,9 +10,13 @@ public class Estudante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int matricula;
+
     private String nome;
+
     private String curso;
+
     private int anoEntrada;
+    
     public int getMatricula() {
         return matricula;
     }

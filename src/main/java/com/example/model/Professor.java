@@ -10,8 +10,11 @@ public class Professor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int codigo;
+
     private String nome;
+
     private String curso;
+    
     private String materiaLecionada;
 
     public int getCodigo() {
