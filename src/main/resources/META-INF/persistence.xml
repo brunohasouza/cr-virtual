@@ -8,6 +8,7 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>com.example.model.Estudante</class>
         <class>com.example.model.Professor</class>
+        <class>com.example.model.Ocorrencia</class>
 
         <properties>
             <!-- Conexão MySQL -->
