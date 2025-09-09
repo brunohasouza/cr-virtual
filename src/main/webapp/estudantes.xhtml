@@ -16,7 +16,7 @@
             <b:button value="Novo Estudante" look="success" icon="plus" onclick="$('#modalNovoEstudante').modal('show')" />
         </div>
         <h:form id="formListaEstudantes">
-            <b:dataTable id="listaEstudantes" value="#{estudanteController.listar()}" var="estudante">
+            <b:dataTable id="listaEstudantes" value="#{eController.listar()}" var="estudante">
                 <b:dataTableColumn value="#{estudante.matricula}" label="Matrícula" width="144px" />
                 <b:dataTableColumn value="#{estudante.nome}" label="Nome" />
                 <b:dataTableColumn value="#{estudante.curso}" label="Curso" />
@@ -28,7 +28,7 @@
                             size="sm"
                             update=":formListaEstudantes :modalDetalhesEstudante"
                             oncomplete="$('#modalDetalhesEstudante').modal('show')"
-                            actionListener="#{estudanteController.selecionar(estudante)}"
+                            actionListener="#{eController.selecionar(estudante)}"
                         />
                         <b:commandButton
                             value="Editar"
@@ -36,7 +36,7 @@
                             size="sm"
                             update=":formListaEstudantes :modalEditarEstudante"
                             oncomplete="$('#modalEditarEstudante').modal('show')"
-                            actionListener="#{estudanteController.selecionar(estudante)}"
+                            actionListener="#{eController.selecionar(estudante)}"
                         />
                         <b:commandButton
                             value="Excluir"
@@ -44,7 +44,7 @@
                             size="sm"
                             update=":formListaEstudantes :modalExcluirEstudante"
                             oncomplete="$('#modalExcluirEstudante').modal('show')"
-                            actionListener="#{estudanteController.selecionar(estudante)}"
+                            actionListener="#{eController.selecionar(estudante)}"
                         />
                     </b:buttonGroup>
                 </b:dataTableColumn>
@@ -59,7 +59,7 @@
                 placeholder="João da Silva"
                 label="Nome"
                 required="true"
-                value="#{estudanteController.estudante.nome}"
+                value="#{eController.estudante.nome}"
             >
                 <f:facet name="prepend">
                     <b:icon value="user" />
@@ -69,7 +69,7 @@
                 placeholder="Análise e Desenvolvimento de Sistemas"
                 label="Curso"
                 required="true"
-                value="#{estudanteController.estudante.curso}"
+                value="#{eController.estudante.curso}"
             >
                 <f:facet name="prepend">
                     <b:icon value="education" />
@@ -80,7 +80,7 @@
                 label="Ano de Entrada"
                 required="true"
                 mask="9999"
-                value="#{estudanteController.estudante.anoEntrada}"
+                value="#{eController.estudante.anoEntrada}"
             >
                 <f:facet name="prepend">
                     <b:icon value="calendar" />
@@ -90,7 +90,7 @@
                 <b:commandButton
                     value="Criar estudante"
                     look="primary"
-                    action="#{estudanteController.criar()}"
+                    action="#{eController.criar()}"
                     ajax="true"
                     update=":formListaEstudantes :formNovoEstudante"
                     oncomplete="$('#modalNovoEstudante').modal('hide');"
@@ -104,13 +104,13 @@
     <b:modal id="modalDetalhesEstudante" title="Detalhes do estudante">
         <b:panelGrid columns="2">
             <h:outputLabel value="Matrícula:" />
-            <h:outputText value="#{estudanteController.estudanteSelecionado.matricula}" />
+            <h:outputText value="#{eController.selecionado.matricula}" />
             <h:outputLabel value="Nome:" />
-            <h:outputText value="#{estudanteController.estudanteSelecionado.nome}" />
+            <h:outputText value="#{eController.selecionado.nome}" />
             <h:outputLabel value="Curso:" />
-            <h:outputText value="#{estudanteController.estudanteSelecionado.curso}" />
+            <h:outputText value="#{eController.selecionado.curso}" />
             <h:outputLabel value="Ano de Entrada:" />
-            <h:outputText value="#{estudanteController.estudanteSelecionado.anoEntrada}" />
+            <h:outputText value="#{eController.selecionado.anoEntrada}" />
         </b:panelGrid>
         <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 10px;">
             <b:button value="Fechar" dismiss="modal"/>
@@ -124,7 +124,7 @@
                 placeholder="João da Silva"
                 label="Nome"
                 required="true"
-                value="#{estudanteController.estudanteSelecionado.nome}"
+                value="#{eController.selecionado.nome}"
             >
                 <f:facet name="prepend">
                     <b:icon value="user" />
@@ -134,7 +134,7 @@
                 placeholder="Análise e Desenvolvimento de Sistemas"
                 label="Curso"
                 required="true"
-                value="#{estudanteController.estudanteSelecionado.curso}"
+                value="#{eController.selecionado.curso}"
             >
                 <f:facet name="prepend">
                     <b:icon value="education" />
@@ -145,7 +145,7 @@
                 label="Ano de Entrada"
                 required="true"
                 mask="9999"
-                value="#{estudanteController.estudanteSelecionado.anoEntrada}"
+                value="#{eController.selecionado.anoEntrada}"
             >
                 <f:facet name="prepend">
                     <b:icon value="calendar" />
@@ -155,7 +155,7 @@
                 <b:commandButton
                     value="Atualizar estudante"
                     look="primary"
-                    action="#{estudanteController.atualizar()}"
+                    action="#{eController.atualizar()}"
                     ajax="true"
                     update=":formListaEstudantes :formEditarEstudante"
                     oncomplete="$('#modalEditarEstudante').modal('hide');"
@@ -170,13 +170,13 @@
         <b:form id="formExcluirEstudante">
             <div style="padding: 15px; border-radius: 1px solid #ebccd1; border-radius: 4px; background-color: #f2dede; color: #a94442;">
                 <p style="margin-bottom: 5px;"><strong>Esta ação não pode ser desfeita.</strong></p>
-                <p style="margin-bottom: 0;">Tem certeza que deseja excluir o/a #{estudanteController.estudanteSelecionado.nome}?</p>
+                <p style="margin-bottom: 0;">Tem certeza que deseja excluir o/a #{eController.selecionado.nome}?</p>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 20px;">
                 <b:commandButton
                     value="Excluir estudante"
                     look="danger"
-                    action="#{estudanteController.remover()}"
+                    action="#{eController.remover()}"
                     ajax="true"
                     update=":formListaEstudantes :formExcluirEstudante"
                     oncomplete="$('#modalExcluirEstudante').modal('hide');"

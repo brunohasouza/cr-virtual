@@ -9,17 +9,173 @@
 </h:head>
 <h:body style="background-color: #f0f0f0;">
     <ui:include src="menu.xhtml"/>
+    <b:growl id="professorGrowl" global-only="true" auto-update="true"/>
     <b:container>
-        <b:row>
-            <b:column>
-                <h1 style="text-align: center;">Professores</h1>
-                <h3 style="text-align: center;">Gerencie os professores cadastrados na plataforma</h3>
-                <p style="text-align: center;">
-                    Nesta seção, você pode visualizar, adicionar, editar e remover professores do sistema.
-                    Utilize as funcionalidades abaixo para gerenciar os perfis dos professores e acompanhar suas atividades acadêmicas.
-                </p>
-            </b:column>
-        </b:row>
+        <div style="display:flex; align-items: center; justify-content: space-between;">
+            <h1 class="margin-bottom: 20px">Professores</h1>
+            <b:button value="Novo Professor" look="success" icon="plus" onclick="$('#modalNovoProfessor').modal('show')" />
+        </div>
+        <h:form id="formListaProfessores">
+            <b:dataTable id="listaProfessores" value="#{pController.listar()}" var="professor">
+                <b:dataTableColumn value="#{professor.codigo}" label="Código" />
+                <b:dataTableColumn value="#{professor.nome}" label="Nome" />
+                <b:dataTableColumn value="#{professor.curso}" label="Curso" />
+                <b:dataTableColumn value="#{professor.materiaLecionada}" label="Disciplina" />
+                <b:dataTableColumn label="Ações" width="157px">
+                    <b:buttonGroup siz="sm">
+                        <b:commandButton
+                            value="Detalhes"
+                            size="sm"
+                            update=":formListaProfessores :modalDetalhesProfessor"
+                            oncomplete="$('#modalDetalhesProfessor').modal('show')"
+                            actionListener="#{pController.selecionar(professor)}"
+                        />
+                        <b:commandButton
+                            value="Editar"
+                            look="primary"
+                            size="sm"
+                            update=":formListaProfessores :modalEditarProfessor"
+                            oncomplete="$('#modalEditarProfessor').modal('show')"
+                            actionListener="#{pController.selecionar(professor)}"
+                        />
+                        <b:commandButton
+                            value="Excluir"
+                            look="danger"
+                            size="sm"
+                            update=":formListaProfessores :modalExcluirProfessor"
+                            oncomplete="$('#modalExcluirProfessor').modal('show')"
+                            actionListener="#{pController.selecionar(professor)}"
+                        />
+                    </b:buttonGroup>
+                </b:dataTableColumn>
+            </b:dataTable>
+        </h:form>
     </b:container>
+
+    <!-- Modal de criação -->
+    <b:modal id="modalNovoProfessor" title="Novo professor">
+        <b:form id="formNovoProfessor">
+            <b:inputText
+                placeholder="João da Silva"
+                label="Nome"
+                required="true"
+                value="#{pController.professor.nome}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="user" />
+                </f:facet>
+            </b:inputText>
+            <b:inputText
+                placeholder="Análise e Desenvolvimento de Sistemas"
+                label="Curso"
+                required="true"
+                value="#{pController.professor.curso}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="education" />
+                </f:facet>
+            </b:inputText>
+            <b:inputText
+                placeholder="Legislação para Informática"
+                label="Disciplina"
+                required="true"
+                value="#{pController.professor.materiaLecionada}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="education" />
+                </f:facet>
+            </b:inputText>
+            <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 10px;">
+                <b:commandButton
+                    value="Criar professor"
+                    look="primary"
+                    action="#{pController.criar()}"
+                    ajax="true"
+                    update=":formListaProfessores :formNovoProfessor"
+                    oncomplete="$('#modalNovoProfessor').modal('hide');"
+                    />
+                <b:button value="Cancelar" dismiss="modal"/>
+            </div>
+        </b:form>
+    </b:modal>
+    <b:modal id="modalDetalhesProfessor" title="Detalhes do professor">
+        <b:panelGrid columns="2">
+            <h:outputLabel value="Código:" />
+            <h:outputText value="#{pController.selecionado.codigo}" />
+            <h:outputLabel value="Nome:" />
+            <h:outputText value="#{pController.selecionado.nome}" />
+            <h:outputLabel value="Curso:" />
+            <h:outputText value="#{pController.selecionado.curso}" />
+            <h:outputLabel value="Disciplina:" />
+            <h:outputText value="#{pController.selecionado.materiaLecionada}" />
+        </b:panelGrid>
+        <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 10px;">
+            <b:button value="Fechar" dismiss="modal"/>
+        </div>
+    </b:modal>
+    <b:modal id="modalEditarProfessor" title="Editar professor">
+        <b:form id="formEditarProfessor">
+            <b:inputText
+                placeholder="João da Silva"
+                label="Nome"
+                required="true"
+                value="#{pController.selecionado.nome}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="user" />
+                </f:facet>
+            </b:inputText>
+            <b:inputText
+                placeholder="Análise e Desenvolvimento de Sistemas"
+                label="Curso"
+                required="true"
+                value="#{pController.selecionado.curso}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="education" />
+                </f:facet>
+            </b:inputText>
+            <b:inputText
+                placeholder="Legislação para Informática"
+                label="Disciplina"
+                required="true"
+                value="#{pController.selecionado.materiaLecionada}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="education" />
+                </f:facet>
+            </b:inputText>
+            <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 10px;">
+                <b:commandButton
+                    value="Atualizar professor"
+                    look="primary"
+                    action="#{pController.atualizar()}"
+                    ajax="true"
+                    update=":formListaProfessores :formEditarProfessor"
+                    oncomplete="$('#modalEditarProfessor').modal('hide');"
+                    />
+                <b:button value="Cancelar" dismiss="modal"/>
+            </div>
+        </b:form>
+    </b:modal>
+    <b:modal id="modalExcluirProfessor" title="Excluir professor">
+        <b:form id="formExcluirProfessor">
+            <div style="padding: 15px; border-radius: 1px solid #ebccd1; border-radius: 4px; background-color: #f2dede; color: #a94442;">
+                <p style="margin-bottom: 5px;"><strong>Esta ação não pode ser desfeita.</strong></p>
+                <p style="margin-bottom: 0;">Tem certeza que deseja excluir o/a #{pController.selecionado.nome}?</p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 20px;">
+                <b:commandButton
+                    value="Excluir professor"
+                    look="danger"
+                    action="#{pController.remover()}"
+                    ajax="true"
+                    update=":formListaProfessores :formExcluirProfessor"
+                    oncomplete="$('#modalExcluirProfessor').modal('hide');"
+                    />
+                <b:button value="Cancelar" dismiss="modal"/>
+            </div>
+        </b:form>
+    </b:modal>
 </h:body>
 </html>

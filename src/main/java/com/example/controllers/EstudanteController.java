@@ -11,11 +11,11 @@ import javax.faces.context.FacesContext;
 import com.example.dao.ManagerDao;
 import com.example.model.Estudante;
 
-@ManagedBean(name = "estudanteController")
+@ManagedBean(name = "eController")
 @SessionScoped
 public class EstudanteController {
     private Estudante estudante;
-    private Estudante estudanteSelecionado;
+    private Estudante selecionado;
 
     @PostConstruct
     public void init() {
@@ -35,17 +35,17 @@ public class EstudanteController {
     }
     
     public void remover() {
-        ManagerDao.getCurrentInstance().delete(this.estudanteSelecionado);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Estudante " + this.estudanteSelecionado.getNome() + " excluído com sucesso!"));
+        ManagerDao.getCurrentInstance().delete(this.selecionado);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Estudante " + this.selecionado.getNome() + " excluído com sucesso!"));
     }
     
     public void atualizar() {
-        ManagerDao.getCurrentInstance().update(this.estudanteSelecionado);
+        ManagerDao.getCurrentInstance().update(this.selecionado);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Estudante atualizado com sucesso!", null));
     }
 
     public void selecionar(Estudante e) {
-        this.estudanteSelecionado = e;
+        this.selecionado = e;
     }
 
     public Estudante getEstudante() {
@@ -56,11 +56,11 @@ public class EstudanteController {
         this.estudante = estudante;
     }
 
-    public Estudante getEstudanteSelecionado() {
-        return estudanteSelecionado;
+    public Estudante getselecionado() {
+        return selecionado;
     }
 
-    public void setEstudanteSelecionado(Estudante estudanteSelecionado) {
-        this.estudanteSelecionado = estudanteSelecionado;
+    public void setselecionado(Estudante selecionado) {
+        this.selecionado = selecionado;
     }
 }
