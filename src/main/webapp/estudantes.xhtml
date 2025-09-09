@@ -7,19 +7,183 @@
 <h:head>
     <title>CR Virtual - Estudantes</title>
 </h:head>
-<h:body style="background-color: #e0e0e0">
+<h:body style="background-color: #f0f0f0">
     <ui:include src="menu.xhtml"/>
+    <b:growl id="estudanteGrowl" global-only="true" auto-update="true"/>
     <b:container>
-        <b:row>
-            <b:column>
-                <h1 style="text-align: center;">Estudantes</h1>
-                <h3 style="text-align: center;">Gerencie os estudantes cadastrados na plataforma</h3>
-                <p style="text-align: center;">
-                    Nesta seção, você pode visualizar, adicionar, editar e remover estudantes do sistema.
-                    Utilize as funcionalidades abaixo para gerenciar os perfis dos estudantes e acompanhar seu progresso acadêmico.
-                </p>
-            </b:column>
-        </b:row>
+        <div style="display:flex; align-items: center; justify-content: space-between;">
+            <h1 class="margin-bottom: 20px">Estudantes</h1>
+            <b:button value="Novo Estudante" look="success" icon="plus" onclick="$('#modalNovoEstudante').modal('show')" />
+        </div>
+        <h:form id="formListaEstudantes">
+            <b:dataTable id="listaEstudantes" value="#{estudanteController.listar()}" var="estudante">
+                <b:dataTableColumn value="#{estudante.matricula}" label="Matrícula" width="144px" />
+                <b:dataTableColumn value="#{estudante.nome}" label="Nome" />
+                <b:dataTableColumn value="#{estudante.curso}" label="Curso" />
+                <b:dataTableColumn value="#{estudante.anoEntrada}" label="Entrada" width="72px" />
+                <b:dataTableColumn label="Ações" width="157px">
+                    <b:buttonGroup siz="sm">
+                        <b:commandButton
+                            value="Detalhes"
+                            size="sm"
+                            update=":formListaEstudantes :modalDetalhesEstudante"
+                            oncomplete="$('#modalDetalhesEstudante').modal('show')"
+                            actionListener="#{estudanteController.selecionar(estudante)}"
+                        />
+                        <b:commandButton
+                            value="Editar"
+                            look="primary"
+                            size="sm"
+                            update=":formListaEstudantes :modalEditarEstudante"
+                            oncomplete="$('#modalEditarEstudante').modal('show')"
+                            actionListener="#{estudanteController.selecionar(estudante)}"
+                        />
+                        <b:commandButton
+                            value="Excluir"
+                            look="danger"
+                            size="sm"
+                            update=":formListaEstudantes :modalExcluirEstudante"
+                            oncomplete="$('#modalExcluirEstudante').modal('show')"
+                            actionListener="#{estudanteController.selecionar(estudante)}"
+                        />
+                    </b:buttonGroup>
+                </b:dataTableColumn>
+            </b:dataTable>
+        </h:form>
     </b:container>
+
+    <!-- Modal de criação -->
+    <b:modal id="modalNovoEstudante" title="Novo estudante">
+        <b:form id="formNovoEstudante">
+            <b:inputText
+                placeholder="João da Silva"
+                label="Nome"
+                required="true"
+                value="#{estudanteController.estudante.nome}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="user" />
+                </f:facet>
+            </b:inputText>
+            <b:inputText
+                placeholder="Análise e Desenvolvimento de Sistemas"
+                label="Curso"
+                required="true"
+                value="#{estudanteController.estudante.curso}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="education" />
+                </f:facet>
+            </b:inputText>
+            <b:inputText
+                placeholder="2018"
+                label="Ano de Entrada"
+                required="true"
+                mask="9999"
+                value="#{estudanteController.estudante.anoEntrada}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="calendar" />
+                </f:facet>
+            </b:inputText>
+            <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 10px;">
+                <b:commandButton
+                    value="Criar estudante"
+                    look="primary"
+                    action="#{estudanteController.criar()}"
+                    ajax="true"
+                    update=":formListaEstudantes :formNovoEstudante"
+                    oncomplete="$('#modalNovoEstudante').modal('hide');"
+                    />
+                <b:button value="Cancelar" dismiss="modal"/>
+            </div>
+        </b:form>
+    </b:modal>
+
+    <!-- Modal de detalhes -->
+    <b:modal id="modalDetalhesEstudante" title="Detalhes do estudante">
+        <b:panelGrid columns="2">
+            <h:outputLabel value="Matrícula:" />
+            <h:outputText value="#{estudanteController.estudanteSelecionado.matricula}" />
+            <h:outputLabel value="Nome:" />
+            <h:outputText value="#{estudanteController.estudanteSelecionado.nome}" />
+            <h:outputLabel value="Curso:" />
+            <h:outputText value="#{estudanteController.estudanteSelecionado.curso}" />
+            <h:outputLabel value="Ano de Entrada:" />
+            <h:outputText value="#{estudanteController.estudanteSelecionado.anoEntrada}" />
+        </b:panelGrid>
+        <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 10px;">
+            <b:button value="Fechar" dismiss="modal"/>
+        </div>
+    </b:modal>
+
+    <!-- Modal de edição -->
+    <b:modal id="modalEditarEstudante" title="Editar estudante">
+        <b:form id="formEditarEstudante">
+            <b:inputText
+                placeholder="João da Silva"
+                label="Nome"
+                required="true"
+                value="#{estudanteController.estudanteSelecionado.nome}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="user" />
+                </f:facet>
+            </b:inputText>
+            <b:inputText
+                placeholder="Análise e Desenvolvimento de Sistemas"
+                label="Curso"
+                required="true"
+                value="#{estudanteController.estudanteSelecionado.curso}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="education" />
+                </f:facet>
+            </b:inputText>
+            <b:inputText
+                placeholder="2018"
+                label="Ano de Entrada"
+                required="true"
+                mask="9999"
+                value="#{estudanteController.estudanteSelecionado.anoEntrada}"
+            >
+                <f:facet name="prepend">
+                    <b:icon value="calendar" />
+                </f:facet>
+            </b:inputText>
+            <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 10px;">
+                <b:commandButton
+                    value="Atualizar estudante"
+                    look="primary"
+                    action="#{estudanteController.atualizar()}"
+                    ajax="true"
+                    update=":formListaEstudantes :formEditarEstudante"
+                    oncomplete="$('#modalEditarEstudante').modal('hide');"
+                    />
+                <b:button value="Cancelar" dismiss="modal"/>
+            </div>
+        </b:form>
+    </b:modal>
+
+    <!-- Modal de exclusão -->
+    <b:modal id="modalExcluirEstudante" title="Excluir estudante">
+        <b:form id="formExcluirEstudante">
+            <div style="padding: 15px; border-radius: 1px solid #ebccd1; border-radius: 4px; background-color: #f2dede; color: #a94442;">
+                <p style="margin-bottom: 5px;"><strong>Esta ação não pode ser desfeita.</strong></p>
+                <p style="margin-bottom: 0;">Tem certeza que deseja excluir o/a #{estudanteController.estudanteSelecionado.nome}?</p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 20px;">
+                <b:commandButton
+                    value="Excluir estudante"
+                    look="danger"
+                    action="#{estudanteController.remover()}"
+                    ajax="true"
+                    update=":formListaEstudantes :formExcluirEstudante"
+                    oncomplete="$('#modalExcluirEstudante').modal('hide');"
+                    />
+                <b:button value="Cancelar" dismiss="modal"/>
+            </div>
+        </b:form>
+    </b:modal>
 </h:body>
 </html>
