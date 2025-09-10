@@ -41,13 +41,16 @@
     <!-- Modal de criação -->
     <b:modal id="modalNovaOcorrencia" title="Nova ocorrência">
         <b:form id="formNovaOcorrencia">
-            <b:selectOneMenu value="#{oController.ocorrencia.tipo}" label="Tipo" required="true" placeholder="Selecione o tipo de ocorrência">
+            <b:selectOneMenu value="#{oController.ocorrencia.tipo}" label="Tipo" required="true">
+                <f:selectItem itemLabel="Selecione o tipo de ocorrência" itemValue="" />
                 <f:selectItems value="#{oController.listarTipoOcorrencias()}" var="t" itemValue="#{t}" itemLabel="#{t}" />
             </b:selectOneMenu>
-            <b:selectOneMenu value="#{oController.codigoProfessor}" label="Professor" required="true" placeholder="Selecione um professor">
+            <b:selectOneMenu value="#{oController.codigoProfessor}" label="Professor" required="true">
+                <f:selectItem itemLabel="Selecione um professor" itemValue="" />
                 <f:selectItems value="#{oController.listarProfessores()}" var="p" itemValue="#{p.codigo}" itemLabel="#{p.nome}"/>
             </b:selectOneMenu>
-            <b:selectOneMenu value="#{oController.matriculaEstudante}" label="Estudante" required="true" placeholder="Selecione um estudante">
+            <b:selectOneMenu value="#{oController.matriculaEstudante}" label="Estudante" required="true">
+                <f:selectItem itemLabel="Selecione um estudante" itemValue="" />
                 <f:selectItems value="#{oController.listarEstudantes()}" var="e" itemValue="#{e.matricula}" itemLabel="#{e.nome}"/>
             </b:selectOneMenu>
             <b:datepicker placeholder="DD/MM/AAAA" label="Data da ocorrência" value="#{oController.ocorrencia.data}" required="true" />
