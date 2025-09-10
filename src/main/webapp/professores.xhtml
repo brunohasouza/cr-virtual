@@ -12,11 +12,11 @@
     <b:growl id="professorGrowl" global-only="true" auto-update="true"/>
     <b:container>
         <div style="display:flex; align-items: center; justify-content: space-between;">
-            <h1 class="margin-bottom: 20px">Professores</h1>
+            <h1 style="margin-bottom: 20px">Professores</h1>
             <b:button value="Novo Professor" look="success" icon="plus" onclick="$('#modalNovoProfessor').modal('show')" />
         </div>
         <h:form id="formListaProfessores">
-            <b:dataTable id="listaProfessores" value="#{pController.listar()}" var="professor">
+            <b:dataTable id="listaProfessores" value="#{pController.listar()}" var="professor" searching="false">
                 <b:dataTableColumn value="#{professor.codigo}" label="Código" />
                 <b:dataTableColumn value="#{professor.nome}" label="Nome" />
                 <b:dataTableColumn value="#{professor.curso}" label="Curso" />

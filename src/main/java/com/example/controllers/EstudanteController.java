@@ -33,6 +33,12 @@ public class EstudanteController {
         
         return ManagerDao.getCurrentInstance().read(query, Estudante.class);
     }
+
+    public Estudante buscaPorMatricula(int matricula) {
+        String query = "SELECT e FROM Estudante e WHERE e.matricula = " + matricula;
+        List<Estudante> result = (List<Estudante>) ManagerDao.getCurrentInstance().read(query, Estudante.class);
+        return result.isEmpty() ? null : result.get(0);
+    }
     
     public void remover() {
         ManagerDao.getCurrentInstance().delete(this.selecionado);

@@ -12,11 +12,11 @@
     <b:growl id="estudanteGrowl" global-only="true" auto-update="true"/>
     <b:container>
         <div style="display:flex; align-items: center; justify-content: space-between;">
-            <h1 class="margin-bottom: 20px">Estudantes</h1>
+            <h1 style="margin-bottom: 20px">Estudantes</h1>
             <b:button value="Novo Estudante" look="success" icon="plus" onclick="$('#modalNovoEstudante').modal('show')" />
         </div>
         <h:form id="formListaEstudantes">
-            <b:dataTable id="listaEstudantes" value="#{eController.listar()}" var="estudante">
+            <b:dataTable id="listaEstudantes" value="#{eController.listar()}" var="estudante" searching="false">
                 <b:dataTableColumn value="#{estudante.matricula}" label="Matrícula" width="144px" />
                 <b:dataTableColumn value="#{estudante.nome}" label="Nome" />
                 <b:dataTableColumn value="#{estudante.curso}" label="Curso" />

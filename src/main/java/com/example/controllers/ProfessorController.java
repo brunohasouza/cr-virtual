@@ -33,6 +33,12 @@ public class ProfessorController {
         
         return ManagerDao.getCurrentInstance().read(query, Professor.class);
     }
+
+    public Professor buscaPorCodigo(int codigo) {
+        String query = "SELECT p FROM Professor p WHERE p.codigo = " + codigo;
+        List<Professor> result = (List<Professor>) ManagerDao.getCurrentInstance().read(query, Professor.class);
+        return result.isEmpty() ? null : result.get(0);
+    }
     
     public void remover() {
         ManagerDao.getCurrentInstance().delete(this.selecionado);

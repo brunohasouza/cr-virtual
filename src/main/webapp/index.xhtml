@@ -10,21 +10,93 @@
 <h:body style="background-color: #f0f0f0;">
     <ui:include src="menu.xhtml"/>
     <b:container>
-        <b:row>
-            <b:column>
-                <h1 style="text-align: center;">Bem-vindo ao CR Virtual</h1>
-                <h3 style="text-align: center;">Sistema de Gerenciamento de Cursos e Recursos Educacionais</h3>
-                <p style="text-align: center;">
-                    O CR Virtual é uma plataforma inovadora projetada para facilitar a gestão de cursos e recursos educacionais.
-                    Com uma interface amigável e funcionalidades robustas, o CR Virtual permite que administradores, professores e estudantes
-                    colaborem de maneira eficiente e eficaz.
-                </p>
-                <p style="text-align: center;">
-                    Explore nossas funcionalidades, gerencie seus cursos, acesse materiais educacionais e conecte-se com a comunidade acadêmica.
-                    Estamos comprometidos em proporcionar uma experiência educacional enriquecedora e acessível para todos os usuários.
-                </p>
-            </b:column>
-        </b:row>
+        <div style="display:flex; align-items: center; justify-content: space-between;">
+            <h1 style="margin-bottom: 20px">Ocorrências</h1>
+            <b:button value="Nova Ocorrência" look="success" icon="plus" onclick="$('#modalNovaOcorrencia').modal('show')" />
+        </div>
+        <b:form id="formListaOcorrencias">
+            <b:dataTable id="listaOcorrencias" value="#{oController.listar()}" var="ocorrencia" searching="false">
+                <b:dataTableColumn value="#{ocorrencia.id}" label="Código" width="80px" />
+                <b:dataTableColumn value="#{ocorrencia.tipo}" label="Tipo" width="130px" />
+                <b:dataTableColumn label="Data" width="80px">
+                    <h:outputText value="#{ocorrencia.data}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </b:dataTableColumn>
+                <b:dataTableColumn value="#{ocorrencia.professor.nome}" label="Professor" />
+                <b:dataTableColumn value="#{ocorrencia.estudante.nome}" label="Estudante" />
+                <b:dataTableColumn label="Ações" width="80px">
+                    <b:commandButton
+                        value="Detalhes"
+                        size="sm"
+                        update=":formListaOcorrencias :modalDetalhesOcorrencia"
+                        oncomplete="$('#modalDetalhesOcorrencia').modal('show')"
+                        actionListener="#{oController.selecionar(ocorrencia)}"
+                    />
+                </b:dataTableColumn>
+            </b:dataTable>
+        </b:form>
     </b:container>
+
+    <!-- Modal de criação -->
+    <b:modal id="modalNovaOcorrencia" title="Nova ocorrência">
+        <b:form id="formNovaOcorrencia">
+            <b:selectOneMenu value="#{oController.ocorrencia.tipo}" label="Tipo" required="true" placeholder="Selecione o tipo de ocorrência">
+                <f:selectItems value="#{oController.listarTipoOcorrencias()}" var="t" itemValue="#{t}" itemLabel="#{t}" />
+            </b:selectOneMenu>
+            <b:selectOneMenu value="#{oController.codigoProfessor}" label="Professor" required="true" placeholder="Selecione um professor">
+                <f:selectItems value="#{oController.listarProfessores()}" var="p" itemValue="#{p.codigo}" itemLabel="#{p.nome}"/>
+            </b:selectOneMenu>
+            <b:selectOneMenu value="#{oController.matriculaEstudante}" label="Estudante" required="true" placeholder="Selecione um estudante">
+                <f:selectItems value="#{oController.listarEstudantes()}" var="e" itemValue="#{e.matricula}" itemLabel="#{e.nome}"/>
+            </b:selectOneMenu>
+            <b:datepicker placeholder="DD/MM/AAAA" label="Data da ocorrência" value="#{oController.ocorrencia.data}" required="true" />
+            <b:inputText placeholder="Sala de aula" label="Local" value="#{oController.ocorrencia.local}" required="true" />
+            <b:inputTextarea placeholder="Descreva a ocorrência" label="Descrição" value="#{oController.ocorrencia.descricao}" required="true" />
+            <b:inputTextarea placeholder="Informação adicional (opcional)" label="Observações" value="#{oController.ocorrencia.infoAdicional}" />
+            <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 10px;">
+                <b:commandButton
+                    value="Criar ocorrência"
+                    look="primary"
+                    action="#{oController.criar()}"
+                    ajax="true"
+                    update=":formListaOcorrencias :formNovaOcorrencia"
+                    oncomplete="$('#modalNovaOcorrencia').modal('hide');"
+                    />
+                <b:button value="Cancelar" dismiss="modal"/>
+            </div>
+        </b:form>
+    </b:modal>
+
+    <!-- Modal de detalhes -->
+    <b:modal id="modalDetalhesOcorrencia" title="Detalhes da ocorrência">
+        <b:panelGrid columns="2">
+            <h:outputLabel value="ID:" />
+            <h:outputText value="#{oController.selecionada.id}" />
+            <h:outputLabel value="Data:" />
+            <h:outputText value="#{oController.selecionada.data}">
+                <f:convertDateTime pattern="dd/MM/yyyy" />
+            </h:outputText>
+            <h:outputLabel value="Tipo:" />
+            <h:outputText value="#{oController.selecionada.tipo}" />
+            <h:outputLabel value="Professor (Código):" />
+            <h:outputText value="#{oController.selecionada.professor.codigo}" />
+            <h:outputLabel value="Professor (Nome):" />
+            <h:outputText value="#{oController.selecionada.professor.nome}" />
+            <h:outputLabel value="Estudante (Matrícula):" />
+            <h:outputText value="#{oController.selecionada.estudante.matricula}" />
+            <h:outputLabel value="Estudante (Nome):" />
+            <h:outputText value="#{oController.selecionada.estudante.nome}" />
+            <h:outputLabel value="Local:" />
+            <h:outputText value="#{oController.selecionada.local}" />
+            <h:outputLabel value="Descrição:" />
+            <h:outputText value="#{oController.selecionada.descricao}" />
+            <h:outputLabel value="Observações:" />
+            <h:outputText value="#{oController.selecionada.infoAdicional}" />
+        </b:panelGrid>
+        <div style="display: flex; gap: 10px; align-items: center; flex-direction: row-reverse; padding-top: 10px;">
+            <b:button value="Fechar" dismiss="modal"/>
+        </div>
+    </b:modal>
 </h:body>
 </html>

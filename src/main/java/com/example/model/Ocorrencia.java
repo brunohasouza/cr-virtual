@@ -8,7 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -30,11 +30,11 @@ public class Ocorrencia {
 
     private String infoAdicional;
 
-    // @OneToMany
-    // private Professor professor;
+    @ManyToOne
+    private Professor professor;
 
-    // @OneToMany
-    // private Estudante estudante;
+    @ManyToOne
+    private Estudante estudante;
 
     public int getId() {
         return id;
@@ -84,19 +84,19 @@ public class Ocorrencia {
         this.infoAdicional = infoAdicional;
     }
 
-    // public Professor getProfessor() {
-    //     return professor;
-    // }
+    public Professor getProfessor() {
+        return professor;
+    }
 
-    // public void setProfessor(Professor professor) {
-    //     this.professor = professor;
-    // }
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
 
-    // public Estudante getEstudante() {
-    //     return estudante;
-    // }
+    public Estudante getEstudante() {
+        return estudante;
+    }
 
-    // public void setEstudante(Estudante estudante) {
-    //     this.estudante = estudante;
-    // }
+    public void setEstudante(Estudante estudante) {
+        this.estudante = estudante;
+    }
 }
