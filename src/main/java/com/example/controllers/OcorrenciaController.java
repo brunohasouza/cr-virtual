@@ -23,6 +23,10 @@ public class OcorrenciaController {
     private int codigoProfessor;
     private int matriculaEstudante;
 
+    private int filtroProfessor;
+    private int filtroEstudante;
+    private TipoOcorrencia filtroTipo;
+
     private ProfessorController pController = new ProfessorController();
     private EstudanteController eController = new EstudanteController();
 
@@ -45,8 +49,27 @@ public class OcorrenciaController {
     }
 
     public List<Ocorrencia> listar() {
-        String query = "SELECT o FROM Ocorrencia o";
+        String query = "SELECT o FROM Ocorrencia o WHERE 1=1";
+
+        if (this.filtroProfessor != 0) {
+            query += " AND o.professor.codigo = " + this.filtroProfessor;
+        }
+        
+        if (this.filtroEstudante != 0) {
+            query += " AND o.estudante.matricula = " + this.filtroEstudante;
+        }
+
+        if (this.filtroTipo != null) {
+            query += " AND o.tipo = com.example.model.TipoOcorrencia." + this.filtroTipo.name();
+        }
+
         return ManagerDao.getCurrentInstance().read(query, Ocorrencia.class);
+    }
+
+    public void limparFiltros() {
+        this.filtroProfessor = 0;
+        this.filtroEstudante = 0;
+        this.filtroTipo = null;
     }
 
     public List<Professor> listarProfessores() {
@@ -96,5 +119,29 @@ public class OcorrenciaController {
 
     public void setSelecionada(Ocorrencia selecionada) {
         this.selecionada = selecionada;
+    }
+
+    public int getFiltroProfessor() {
+        return filtroProfessor;
+    }
+
+    public void setFiltroProfessor(int filtroProfessor) {
+        this.filtroProfessor = filtroProfessor;
+    }
+
+    public int getFiltroEstudante() {
+        return filtroEstudante;
+    }
+
+    public void setFiltroEstudante(int filtroEstudante) {
+        this.filtroEstudante = filtroEstudante;
+    }
+
+    public TipoOcorrencia getFiltroTipo() {
+        return filtroTipo;
+    }
+
+    public void setFiltroTipo(TipoOcorrencia filtroTipo) {
+        this.filtroTipo = filtroTipo;
     }
 }

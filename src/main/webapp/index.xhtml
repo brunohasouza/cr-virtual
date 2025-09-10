@@ -14,6 +14,45 @@
             <h1 style="margin-bottom: 20px">Ocorrências</h1>
             <b:button value="Nova Ocorrência" look="success" icon="plus" onclick="$('#modalNovaOcorrencia').modal('show')" />
         </div>
+        <b:form>
+            <div style="display: flex; align-items: flex-end; justify-content: flex-end; gap: 30px;">
+                <div style="flex: none; width: 20%;">
+                    <b:selectOneMenu style="margin: 0;" value="#{oController.filtroTipo}" label="Tipo">
+                        <f:selectItem itemLabel="Todos os tipos" itemValue="" />
+                        <f:selectItems value="#{oController.listarTipoOcorrencias()}" var="t" itemValue="#{t}" itemLabel="#{t}" />
+                    </b:selectOneMenu>
+                </div>
+                <div style="flex: none; width: 20%;">
+                    <b:selectOneMenu style="margin: 0;" value="#{oController.filtroProfessor}" label="Professor">
+                        <f:selectItem itemLabel="Todos os professores" itemValue="" />
+                        <f:selectItems value="#{oController.listarProfessores()}" var="p" itemValue="#{p.codigo}" itemLabel="#{p.nome}"/>
+                    </b:selectOneMenu>
+                </div>
+                <div style="flex: none; width: 20%;">
+                    <b:selectOneMenu style="margin: 0;" value="#{oController.filtroEstudante}" label="Estudante">
+                        <f:selectItem itemLabel="Todos os estudantes" itemValue="" />
+                        <f:selectItems value="#{oController.listarEstudantes()}" var="e" itemValue="#{e.matricula}" itemLabel="#{e.nome}"/>
+                    </b:selectOneMenu>
+                </div>
+                <b:commandButton
+                    value="Filtrar"
+                    look="primary"
+                    icon="filter"
+                    action="#{oController.listar()}"
+                    ajax="true"
+                    update=":formListaOcorrencias"
+                    style="flex: none; margin-bottom: 15px; margin-right: -15px;"
+                />
+                <b:commandButton
+                    value="Limpar"
+                    icon="refresh"
+                    action="#{oController.limparFiltros()}"
+                    ajax="true"
+                    update=":formListaOcorrencias"
+                    style="flex: none; margin-bottom: 15px;"
+                />
+            </div>
+        </b:form>
         <b:form id="formListaOcorrencias">
             <b:dataTable id="listaOcorrencias" value="#{oController.listar()}" var="ocorrencia" searching="false">
                 <b:dataTableColumn value="#{ocorrencia.id}" label="Código" width="80px" />
